@@ -17,6 +17,16 @@ func Test_SimpleIntAssign(t *testing.T) {
 	assert.Equal(t, token.New(token.EOF, "", 1, 12), lex.NextToken())
 }
 
+func Test_SimpleFuncCall(t *testing.T) {
+	lex := lexer.New(`say("Hello, World!")`)
+
+	assert.Equal(t, token.New(token.IDENT, "say", 1, 1), lex.NextToken())
+	assert.Equal(t, token.New(token.LPAREN, "(", 1, 4), lex.NextToken())
+	assert.Equal(t, token.New(token.STRING, "Hello, World!", 1, 5), lex.NextToken())
+	assert.Equal(t, token.New(token.RPAREN, ")", 1, 20), lex.NextToken())
+	assert.Equal(t, token.New(token.EOF, "", 1, 21), lex.NextToken())
+}
+
 func Test_SimpleFloatAssign(t *testing.T) {
 	lex := lexer.New("apple := 10.22")
 

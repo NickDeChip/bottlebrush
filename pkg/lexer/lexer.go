@@ -61,6 +61,46 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Literal = string(l.ru)
 		tok.Line = l.line
 		l.line++
+	case '(':
+		tok.Type = token.LPAREN
+		tok.Col = l.col
+		tok.Literal = string(l.ru)
+		tok.Line = l.line
+	case ')':
+		tok.Type = token.RPAREN
+		tok.Col = l.col
+		tok.Literal = string(l.ru)
+		tok.Line = l.line
+	case ',':
+		tok.Type = token.COMMA
+		tok.Col = l.col
+		tok.Literal = string(l.ru)
+		tok.Line = l.line
+	case '+':
+		tok.Type = token.ADD
+		tok.Col = l.col
+		tok.Literal = string(l.ru)
+		tok.Line = l.line
+	case '-':
+		tok.Type = token.SUB
+		tok.Col = l.col
+		tok.Literal = string(l.ru)
+		tok.Line = l.line
+	case '*':
+		tok.Type = token.TIMES
+		tok.Col = l.col
+		tok.Literal = string(l.ru)
+		tok.Line = l.line
+	case '/':
+		tok.Type = token.DIV
+		tok.Col = l.col
+		tok.Literal = string(l.ru)
+		tok.Line = l.line
+	case '%':
+		tok.Type = token.MOD
+		tok.Col = l.col
+		tok.Literal = string(l.ru)
+		tok.Line = l.line
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF

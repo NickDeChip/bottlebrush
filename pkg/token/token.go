@@ -32,7 +32,6 @@ const (
 	EOF     Type = "EOF"
 
 	IDENT Type = "IDENT"
-	NL    Type = "NL"
 
 	// Literals
 	INT    Type = "INT"
@@ -40,33 +39,45 @@ const (
 	STRING Type = "STRING"
 
 	// Operators
-	ASSIGN = "="
+	ADD   Type = "+"
+	SUB   Type = "-"
+	TIMES Type = "*"
+	DIV   Type = "/"
+	MOD   Type = "%"
 
-	VAR   = ":="
-	CONST = "::"
+	ASSIGN Type = "="
+
+	VAR   Type = ":="
+	CONST Type = "::"
+
+	// Delimiters
+	NL     Type = "NL"
+	LPAREN Type = "("
+	RPAREN Type = ")"
+	COMMA  Type = ","
 
 	// Keywords
 	START  Type = "START"
 	END    Type = "END"
+	TRUE   Type = "TRUE"
+	FALSE  Type = "FALSE"
 	FN     Type = "FN"
 	RETURN Type = "RETURN"
 	FOR    Type = "FOR"
 	IN     Type = "IN"
 	IF     Type = "IF"
-	TRUE   Type = "TRUE"
-	FALSE  Type = "FALSE"
 )
 
 var keywords = map[string]Type{
 	"start":  START,
 	"end":    END,
+	"true":   TRUE,
+	"false":  FALSE,
 	"fn":     FN,
 	"return": RETURN,
 	"for":    FOR,
 	"in":     IN,
 	"if":     IF,
-	"true":   TRUE,
-	"false":  FALSE,
 }
 
 func LookUpIdent(ident string) Type {

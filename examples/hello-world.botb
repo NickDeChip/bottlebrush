@@ -1,0 +1,8 @@
+next := 0
+addOne :: fn (prev, cur) start
+next = prev + cur
+say(prev)
+addOne(cur, next)
+end
+
+addOne(1, 1)

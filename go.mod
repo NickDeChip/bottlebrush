@@ -1,4 +1,4 @@
-module github.com/NickDeChip/bottlebrush
+module github.com/NickDeChip/bottle-brush
 
 go 1.19
 
