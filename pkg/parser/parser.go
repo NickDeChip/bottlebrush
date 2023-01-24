@@ -112,6 +112,8 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
+	case token.FOR:
+		return p.parseForStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
 	case token.IDENT:
@@ -449,6 +451,24 @@ func (p *Parser) parseIfExpression() ast.Expression {
 	// TODO: add else surrport
 
 	return expression
+}
+
+func (p *Parser) parseForStatement() *ast.ForStatement {
+	stmt := &ast.ForStatement{
+		Token: p.curToken,
+	}
+
+	p.nextToken()
+
+	stmt.Condition = p.parserExpression(LOWEST)
+
+	if !p.expectPeek(token.START) {
+		return nil
+	}
+
+	stmt.Consequence = p.parseBlockStatement()
+
+	return stmt
 }
 
 func (p *Parser) parseBool() ast.Expression {

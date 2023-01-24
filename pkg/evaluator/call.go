@@ -45,7 +45,7 @@ func extendFunctionEnv(fn *object.Fn, args []object.Object) *object.Environment 
 	env := object.NewEncolsedEnvironment(fn.Env)
 
 	for paramIdx, param := range fn.Parameters {
-		env.Set(param.Value, object.Var{
+		env.SetVar(param.Value, object.Var{
 			Object: args[paramIdx],
 			Mut:    true,
 		})

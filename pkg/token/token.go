@@ -73,6 +73,7 @@ const (
 	AND    Type = "AND"
 	OR     Type = "OR"
 	IF     Type = "IF"
+	FOR    Type = "FOR"
 )
 
 var keywords = map[string]Type{
@@ -85,6 +86,7 @@ var keywords = map[string]Type{
 	"and":    AND,
 	"or":     OR,
 	"if":     IF,
+	"for":    FOR,
 }
 
 func LookUpIdent(ident string) Type {
