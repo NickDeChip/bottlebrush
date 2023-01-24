@@ -17,6 +17,8 @@ func evalPrefixExpression(operator string, right object.Object, line, col int) o
 	switch operator {
 	case "-":
 		return evalMinusPrefixOperatorExpression(right, line, col)
+	case "!":
+		return evalBangPrefixOperatorExpression(right, line, col)
 	default:
 		return newError("unkown operator: %s%s; line=%d; col=%d", operator, right.Type(), line, col)
 	}
@@ -32,5 +34,16 @@ func evalMinusPrefixOperatorExpression(right object.Object, line, col int) objec
 		return &object.Float{Value: -value}
 	default:
 		return newError("unkown operator: -%s; line=%d; col=%d", right.Type(), line, col)
+	}
+}
+
+func evalBangPrefixOperatorExpression(right object.Object, line, col int) object.Object {
+	switch {
+	case right.Type() == object.BOOL:
+		value := right.(*object.Bool).Value
+		return getBool(!value)
+
+	default:
+		return newError("unkown operator: !%s; line=%d; col=%d", right.Type(), line, col)
 	}
 }

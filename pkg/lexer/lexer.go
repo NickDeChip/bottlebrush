@@ -32,22 +32,36 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.ru {
 	case '=':
-		tok = token.NewR(token.ASSIGN, l.ru, l.line, l.col)
+		if l.peekRune() == '=' {
+			tok = l.newTokenDouble(token.EQ)
+		} else {
+			tok = l.newToken(token.ASSIGN)
+		}
 	case ':':
 		if l.peekRune() == '=' {
-			line := l.col
-			ch := l.ru
-			l.readRune()
-			literal := string(ch) + string(l.ru)
-			tok = token.New(token.VAR, literal, l.line, line)
+			tok = l.newTokenDouble(token.VAR)
 		} else if l.peekRune() == ':' {
-			line := l.col
-			ch := l.ru
-			l.readRune()
-			literal := string(ch) + string(l.ru)
-			tok = token.New(token.CONST, literal, l.line, line)
+			tok = l.newTokenDouble(token.CONST)
 		} else {
-			tok = token.NewR(token.ILLEGAL, l.ru, l.line, l.col)
+			tok = l.newToken(token.ILLEGAL)
+		}
+	case '!':
+		if l.peekRune() == '=' {
+			tok = l.newTokenDouble(token.NOTEQ)
+		} else {
+			tok = l.newToken(token.BANG)
+		}
+	case '>':
+		if l.peekRune() == '=' {
+			tok = l.newTokenDouble(token.GTEQ)
+		} else {
+			tok = l.newToken(token.GT)
+		}
+	case '<':
+		if l.peekRune() == '=' {
+			tok = l.newTokenDouble(token.LTEQ)
+		} else {
+			tok = l.newToken(token.LTEQ)
 		}
 	case '"':
 		tok.Type = token.STRING
@@ -55,52 +69,24 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Literal = l.readString()
 		tok.Line = l.line
 	case '\n':
-		tok.Type = token.NL
-		tok.Col = l.col
-		l.col = 0
-		tok.Literal = string(l.ru)
-		tok.Line = l.line
+		tok = l.newToken(token.NL)
 		l.line++
 	case '(':
-		tok.Type = token.LPAREN
-		tok.Col = l.col
-		tok.Literal = string(l.ru)
-		tok.Line = l.line
+		tok = l.newToken(token.LPAREN)
 	case ')':
-		tok.Type = token.RPAREN
-		tok.Col = l.col
-		tok.Literal = string(l.ru)
-		tok.Line = l.line
+		tok = l.newToken(token.RPAREN)
 	case ',':
-		tok.Type = token.COMMA
-		tok.Col = l.col
-		tok.Literal = string(l.ru)
-		tok.Line = l.line
+		tok = l.newToken(token.COMMA)
 	case '+':
-		tok.Type = token.ADD
-		tok.Col = l.col
-		tok.Literal = string(l.ru)
-		tok.Line = l.line
+		tok = l.newToken(token.ADD)
 	case '-':
-		tok.Type = token.SUB
-		tok.Col = l.col
-		tok.Literal = string(l.ru)
-		tok.Line = l.line
+		tok = l.newToken(token.SUB)
 	case '*':
-		tok.Type = token.TIMES
-		tok.Col = l.col
-		tok.Literal = string(l.ru)
-		tok.Line = l.line
+		tok = l.newToken(token.TIMES)
 	case '/':
-		tok.Type = token.DIV
-		tok.Col = l.col
-		tok.Literal = string(l.ru)
-		tok.Line = l.line
+		tok = l.newToken(token.DIV)
 	case '%':
-		tok.Type = token.MOD
-		tok.Col = l.col
-		tok.Literal = string(l.ru)
-		tok.Line = l.line
+		tok = l.newToken(token.MOD)
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
@@ -193,6 +179,18 @@ func (l *Lexer) skipComments() {
 		}
 		l.skipWhitespace()
 	}
+}
+
+func (l *Lexer) newToken(tokType token.Type) token.Token {
+	return token.NewR(tokType, l.ru, l.line, l.col)
+}
+
+func (l *Lexer) newTokenDouble(tokType token.Type) token.Token {
+	col := l.col
+	ch := l.ru
+	l.readRune()
+	literal := string(ch) + string(l.ru)
+	return token.New(tokType, literal, l.line, col)
 }
 
 func isDigit(ru rune) bool {

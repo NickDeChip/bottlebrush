@@ -10,6 +10,20 @@ func evalInfix(node *ast.InfixExpression, env *object.Environment) object.Object
 	if isError(left) {
 		return left
 	}
+
+	if node.Operator == "and" && left.Type() == object.BOOL {
+		leftval := left.(*object.Bool).Value
+		if !leftval {
+			return FALSE
+		}
+	}
+	if node.Operator == "or" && left.Type() == object.BOOL {
+		leftval := left.(*object.Bool).Value
+		if leftval {
+			return TRUE
+		}
+	}
+
 	right := Eval(node.Right, env)
 	if isError(right) {
 		return right
@@ -25,6 +39,8 @@ func evalInfixExpression(operator string, left, right object.Object, line, col i
 		return evalFloatInfixExpression(operator, left, right, line, col)
 	case left.Type() == object.STRING && right.Type() == object.STRING:
 		return evalStringInfixExpression(operator, left, right, line, col)
+	case left.Type() == object.BOOL && right.Type() == object.BOOL:
+		return evalBoolInfixExpression(operator, left, right, line, col)
 
 	default:
 		return newError("unkown operator: %s %s %s; line=%d; col=%d", left.Type(), operator, right.Type(), line, col)
@@ -46,6 +62,19 @@ func evalIntegerInfixExpression(operator string, left, right object.Object, line
 		return &object.Integer{Value: leftval / rightval}
 	case "%":
 		return &object.Integer{Value: leftval % rightval}
+	case "==":
+		return getBool(leftval == rightval)
+	case "!=":
+		return getBool(leftval != rightval)
+	case ">":
+		return getBool(leftval > rightval)
+	case ">=":
+		return getBool(leftval >= rightval)
+	case "<":
+		return getBool(leftval < rightval)
+	case "<=":
+		return getBool(leftval <= rightval)
+
 	default:
 		return newError("unkown operator: %s %s %s; line=%d; col=%d", left.Type(), operator, right.Type(), line, col)
 	}
@@ -63,6 +92,19 @@ func evalFloatInfixExpression(operator string, left, right object.Object, line, 
 		return &object.Float{Value: leftval * rightval}
 	case "/":
 		return &object.Float{Value: leftval / rightval}
+	case "==":
+		return getBool(leftval == rightval)
+	case "!=":
+		return getBool(leftval != rightval)
+	case ">":
+		return getBool(leftval > rightval)
+	case ">=":
+		return getBool(leftval >= rightval)
+	case "<":
+		return getBool(leftval < rightval)
+	case "<=":
+		return getBool(leftval <= rightval)
+
 	default:
 		return newError("unkown operator: %s %s %s; line=%d; col=%d", left.Type(), operator, right.Type(), line, col)
 	}
@@ -75,7 +117,39 @@ func evalStringInfixExpression(operator string, left, right object.Object, line,
 	switch operator {
 	case "+":
 		return &object.String{Value: leftval + rightval}
+	case "==":
+		return getBool(leftval == rightval)
+	case "!=":
+		return getBool(leftval != rightval)
+
 	default:
 		return newError("unkown operator: %s %s %s; line=%d; col=%d", left.Type(), operator, right.Type(), line, col)
+	}
+}
+
+func evalBoolInfixExpression(operator string, left, right object.Object, line, col int) object.Object {
+	leftval := left.(*object.Bool).Value
+	rightval := right.(*object.Bool).Value
+
+	switch operator {
+	case "==":
+		return getBool(leftval == rightval)
+	case "!=":
+		return getBool(leftval != rightval)
+	case "and":
+		return getBool(leftval && rightval)
+	case "or":
+		return getBool(leftval || rightval)
+
+	default:
+		return newError("unkown operator: %s %s %s; line=%d; col=%d", left.Type(), operator, right.Type(), line, col)
+	}
+}
+
+func getBool(condition bool) *object.Bool {
+	if condition {
+		return TRUE
+	} else {
+		return FALSE
 	}
 }

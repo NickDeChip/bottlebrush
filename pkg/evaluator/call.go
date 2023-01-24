@@ -1,6 +1,8 @@
 package evaluator
 
 import (
+	"fmt"
+
 	"github.com/NickDeChip/bottle-brush/pkg/ast"
 	"github.com/NickDeChip/bottle-brush/pkg/object"
 )
@@ -27,6 +29,9 @@ func applyFunction(fn object.Object, args []object.Object, line int, col int) ob
 
 	case *object.Builtin:
 		if res := fn.Fn(args...); res != nil {
+			if err, ok := res.(*object.Error); ok {
+				err.Message += fmt.Sprintf("; line=%d; col=%d", line, col)
+			}
 			return res
 		}
 		return NULL

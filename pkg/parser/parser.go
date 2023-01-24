@@ -12,6 +12,9 @@ import (
 const (
 	_ int = iota
 	LOWEST
+	LOGICAL
+	EQUALS
+	LESSGREATER
 	SUM
 	PRODUCT
 	PREFIX
@@ -25,6 +28,14 @@ var precedence = map[token.Type]int{
 	token.TIMES:  PRODUCT,
 	token.MOD:    PRODUCT,
 	token.LPAREN: CALL,
+	token.EQ:     EQUALS,
+	token.NOTEQ:  EQUALS,
+	token.LT:     LESSGREATER,
+	token.LTEQ:   LESSGREATER,
+	token.GT:     LESSGREATER,
+	token.GTEQ:   LESSGREATER,
+	token.AND:    LOGICAL,
+	token.OR:     LOGICAL,
 }
 
 type (
@@ -59,6 +70,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.TRUE, p.parseBool)
 	p.registerPrefix(token.FALSE, p.parseBool)
 	p.registerPrefix(token.FN, p.parseFunctionLiteral)
+	p.registerPrefix(token.BANG, p.parsePrefixExpression)
+	p.registerPrefix(token.IF, p.parseIfExpression)
 
 	p.infixParseFns = make(map[token.Type]infixParseFn)
 	p.registerInfix(token.ADD, p.parseInfixExpression)
@@ -67,6 +80,14 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.TIMES, p.parseInfixExpression)
 	p.registerInfix(token.MOD, p.parseInfixExpression)
 	p.registerInfix(token.LPAREN, p.parseCallExpression)
+	p.registerInfix(token.EQ, p.parseInfixExpression)
+	p.registerInfix(token.NOTEQ, p.parseInfixExpression)
+	p.registerInfix(token.LT, p.parseInfixExpression)
+	p.registerInfix(token.LTEQ, p.parseInfixExpression)
+	p.registerInfix(token.GT, p.parseInfixExpression)
+	p.registerInfix(token.GTEQ, p.parseInfixExpression)
+	p.registerInfix(token.AND, p.parseInfixExpression)
+	p.registerInfix(token.OR, p.parseInfixExpression)
 
 	p.nextToken()
 	p.nextToken()
@@ -411,6 +432,23 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	stmt.ReturnValue = exp
 
 	return stmt
+}
+
+func (p *Parser) parseIfExpression() ast.Expression {
+	expression := &ast.IfExspression{Token: p.curToken}
+
+	p.nextToken()
+	expression.Condition = p.parserExpression(LOWEST)
+
+	if !p.expectPeek(token.START) {
+		return nil
+	}
+
+	expression.Consequence = p.parseBlockStatement()
+
+	// TODO: add else surrport
+
+	return expression
 }
 
 func (p *Parser) parseBool() ast.Expression {

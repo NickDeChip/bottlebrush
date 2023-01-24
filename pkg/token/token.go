@@ -45,10 +45,17 @@ const (
 	DIV   Type = "/"
 	MOD   Type = "%"
 
-	ASSIGN Type = "="
+	BANG  Type = "!"
+	EQ    Type = "=="
+	NOTEQ Type = "!="
+	GT    Type = ">"
+	LT    Type = "<"
+	GTEQ  Type = ">="
+	LTEQ  Type = "<="
 
-	VAR   Type = ":="
-	CONST Type = "::"
+	ASSIGN Type = "="
+	VAR    Type = ":="
+	CONST  Type = "::"
 
 	// Delimiters
 	NL     Type = "NL"
@@ -63,8 +70,8 @@ const (
 	FALSE  Type = "FALSE"
 	FN     Type = "FN"
 	RETURN Type = "RETURN"
-	FOR    Type = "FOR"
-	IN     Type = "IN"
+	AND    Type = "AND"
+	OR     Type = "OR"
 	IF     Type = "IF"
 )
 
@@ -75,8 +82,8 @@ var keywords = map[string]Type{
 	"false":  FALSE,
 	"fn":     FN,
 	"return": RETURN,
-	"for":    FOR,
-	"in":     IN,
+	"and":    AND,
+	"or":     OR,
 	"if":     IF,
 }
 
