@@ -50,8 +50,11 @@ type Parser struct {
 	l      *lexer.Lexer
 	errors []string
 
-	curToken  token.Token
-	peekToken token.Token
+	curToken   token.Token
+	peekToken  token.Token
+	peek2Token token.Token
+	peek3Token token.Token
+	peek4Token token.Token
 
 	prefixParseFns map[token.Type]prefixParseFn
 	infixParseFns  map[token.Type]infixParseFn
@@ -96,6 +99,9 @@ func New(l *lexer.Lexer) *Parser {
 
 	p.nextToken()
 	p.nextToken()
+	p.nextToken()
+	p.nextToken()
+	p.nextToken()
 
 	return p
 }
@@ -130,6 +136,8 @@ func (p *Parser) parseStatement() ast.Statement {
 			return p.parseAssignment()
 		} else if p.isDeclaration() {
 			return p.parseDeclaration()
+		} else if p.isIndexAssignment() {
+			return p.parseIndexAssignment()
 		}
 
 		return p.parseExpressionStatement()
@@ -178,7 +186,10 @@ func (p *Parser) parserExpression(precdence int) ast.Expression {
 
 func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
-	p.peekToken = p.l.NextToken()
+	p.peekToken = p.peek2Token
+	p.peek2Token = p.peek3Token
+	p.peek3Token = p.peek4Token
+	p.peek4Token = p.l.NextToken()
 }
 
 func (p *Parser) peekPrecedence() int {
@@ -207,6 +218,38 @@ func (p *Parser) parseAssignment() *ast.AssignmentStatement {
 	if p.peekTokenIs(token.NL) {
 		p.nextToken()
 	}
+	return stmt
+}
+
+func (p *Parser) parseIndexAssignment() *ast.IndexAssignmentStatement {
+	stmt := &ast.IndexAssignmentStatement{}
+	stmt.Name = &ast.Identifier{
+		Token: p.curToken,
+		Value: p.curToken.Literal,
+	}
+
+	p.nextToken()
+	p.nextToken()
+	stmt.Index = p.parserExpression(LOWEST)
+
+	if !p.expectPeek(token.RBRACKET) {
+		return nil
+	}
+
+	if !p.expectPeek(token.ASSIGN) {
+		return nil
+	}
+
+	stmt.Token = p.curToken
+
+	p.nextToken()
+
+	stmt.Value = p.parserExpression(LOWEST)
+
+	if p.peekTokenIs(token.NL) {
+		p.nextToken()
+	}
+
 	return stmt
 }
 
@@ -572,6 +615,20 @@ func (p *Parser) peekTokenIs(t token.Type) bool {
 	return p.peekToken.Type == t
 }
 
+func (p *Parser) peekTokenIndexIs(idx int, t token.Type) bool {
+	switch idx {
+	case 2:
+		return p.peek2Token.Type == t
+	case 3:
+		return p.peek3Token.Type == t
+	case 4:
+		return p.peek4Token.Type == t
+
+	default:
+		return false
+	}
+}
+
 func (p *Parser) expectPeek(t token.Type) bool {
 	if p.peekTokenIs(t) {
 		p.nextToken()
@@ -609,4 +666,8 @@ func (p *Parser) isDeclaration() bool {
 
 func (p *Parser) isAssignment() bool {
 	return p.peekTokenIs(token.ASSIGN)
+}
+
+func (p *Parser) isIndexAssignment() bool {
+	return p.peekTokenIs(token.LBRACKET) && p.peekTokenIndexIs(3, token.RBRACKET) && p.peekTokenIndexIs(4, token.ASSIGN)
 }

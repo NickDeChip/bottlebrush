@@ -27,6 +27,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalVar(node, env)
 	case *ast.AssignmentStatement:
 		return evalAssignment(node, env)
+	case *ast.IndexAssignmentStatement:
+		return evalIndexAssignment(node, env)
 	case *ast.StringLiteral:
 		return &object.String{Value: node.Value}
 	case *ast.FloatLiteral:

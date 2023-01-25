@@ -1,7 +1,5 @@
-if false start
-say("bad")
-elif false start
-say("good")
-else
-  say("umm")
-end
+cake := ["lad"]
+
+cake[0] = "true lad"
+
+say(cake[0])
