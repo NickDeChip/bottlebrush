@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/NickDeChip/bottle-brush/pkg/ast"
-	"github.com/NickDeChip/bottle-brush/pkg/lexer"
-	"github.com/NickDeChip/bottle-brush/pkg/token"
+	"github.com/NickDeChip/bottlebrush/pkg/ast"
+	"github.com/NickDeChip/bottlebrush/pkg/lexer"
+	"github.com/NickDeChip/bottlebrush/pkg/token"
 )
 
 const (

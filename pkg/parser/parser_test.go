@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/NickDeChip/bottle-brush/pkg/ast"
-	"github.com/NickDeChip/bottle-brush/pkg/lexer"
-	"github.com/NickDeChip/bottle-brush/pkg/parser"
+	"github.com/NickDeChip/bottlebrush/pkg/ast"
+	"github.com/NickDeChip/bottlebrush/pkg/lexer"
+	"github.com/NickDeChip/bottlebrush/pkg/parser"
 	"github.com/stretchr/testify/assert"
 )
 

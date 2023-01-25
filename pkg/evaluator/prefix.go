@@ -1,8 +1,8 @@
 package evaluator
 
 import (
-	"github.com/NickDeChip/bottle-brush/pkg/ast"
-	"github.com/NickDeChip/bottle-brush/pkg/object"
+	"github.com/NickDeChip/bottlebrush/pkg/ast"
+	"github.com/NickDeChip/bottlebrush/pkg/object"
 )
 
 func evalPrefix(node *ast.PrefixExpression, env *object.Environment) object.Object {

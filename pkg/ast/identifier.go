@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"github.com/NickDeChip/bottle-brush/pkg/token"
+	"github.com/NickDeChip/bottlebrush/pkg/token"
 )
 
 type Identifier struct {

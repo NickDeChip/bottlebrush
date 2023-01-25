@@ -3,10 +3,10 @@ package evaluator_test
 import (
 	"testing"
 
-	"github.com/NickDeChip/bottle-brush/pkg/evaluator"
-	"github.com/NickDeChip/bottle-brush/pkg/lexer"
-	"github.com/NickDeChip/bottle-brush/pkg/object"
-	"github.com/NickDeChip/bottle-brush/pkg/parser"
+	"github.com/NickDeChip/bottlebrush/pkg/evaluator"
+	"github.com/NickDeChip/bottlebrush/pkg/lexer"
+	"github.com/NickDeChip/bottlebrush/pkg/object"
+	"github.com/NickDeChip/bottlebrush/pkg/parser"
 	"github.com/stretchr/testify/assert"
 )
 

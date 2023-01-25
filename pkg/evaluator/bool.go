@@ -1,6 +1,6 @@
 package evaluator
 
-import "github.com/NickDeChip/bottle-brush/pkg/object"
+import "github.com/NickDeChip/bottlebrush/pkg/object"
 
 func evalBool(input bool) *object.Bool {
 	if input {

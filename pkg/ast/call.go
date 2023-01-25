@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/NickDeChip/bottle-brush/pkg/token"
+	"github.com/NickDeChip/bottlebrush/pkg/token"
 )
 
 type CallExpression struct {

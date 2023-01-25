@@ -1,6 +1,6 @@
 package builtins
 
-import "github.com/NickDeChip/bottle-brush/pkg/object"
+import "github.com/NickDeChip/bottlebrush/pkg/object"
 
 var say = &object.Builtin{
 	Fn: func(args ...object.Object) object.Object {

@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/NickDeChip/bottle-brush/pkg/token"
+import "github.com/NickDeChip/bottlebrush/pkg/token"
 
 type ExpressionStatement struct {
 	Token      token.Token

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/NickDeChip/bottle-brush/pkg/ast"
+	"github.com/NickDeChip/bottlebrush/pkg/ast"
 )
 
 type Fn struct {

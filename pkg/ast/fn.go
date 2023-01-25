@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/NickDeChip/bottle-brush/pkg/token"
+	"github.com/NickDeChip/bottlebrush/pkg/token"
 )
 
 type FunctionLiteral struct {

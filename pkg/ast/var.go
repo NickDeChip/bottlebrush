@@ -3,7 +3,7 @@ package ast
 import (
 	"bytes"
 
-	"github.com/NickDeChip/bottle-brush/pkg/token"
+	"github.com/NickDeChip/bottlebrush/pkg/token"
 )
 
 type VarStatement struct {

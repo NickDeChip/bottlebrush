@@ -3,8 +3,8 @@ package lexer_test
 import (
 	"testing"
 
-	"github.com/NickDeChip/bottle-brush/pkg/lexer"
-	"github.com/NickDeChip/bottle-brush/pkg/token"
+	"github.com/NickDeChip/bottlebrush/pkg/lexer"
+	"github.com/NickDeChip/bottlebrush/pkg/token"
 	"github.com/stretchr/testify/assert"
 )
 
