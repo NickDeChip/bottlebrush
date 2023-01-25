@@ -10,7 +10,7 @@ type IfExspression struct {
 	Token       token.Token
 	Condition   Expression
 	Consequence *BlockStatement
-	Alternative *BlockStatement
+	Alternative Expression
 }
 
 func (ie *IfExspression) expressionNode() {}

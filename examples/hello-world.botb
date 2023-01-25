@@ -1,0 +1,7 @@
+if false start
+say("bad")
+elif false start
+say("good")
+else
+  say("umm")
+end

@@ -360,7 +360,7 @@ func (p *Parser) parseIfBlockStatement() *ast.BlockStatement {
 
 	p.nextToken()
 
-	for !p.curTokenIs(token.END) && !p.curTokenIs(token.EOF) && !p.curTokenIs(token.ELSE) {
+	for !p.curTokenIs(token.END) && !p.curTokenIs(token.EOF) && !p.curTokenIs(token.ELSE) && !p.curTokenIs(token.ELIF) {
 		stmt := p.parseStatement()
 		if stmt != nil {
 			block.Statements = append(block.Statements, stmt)
@@ -520,7 +520,15 @@ func (p *Parser) parseIfExpression() ast.Expression {
 	expression.Consequence = p.parseIfBlockStatement()
 
 	if p.curTokenIs(token.ELSE) {
-		expression.Alternative = p.parseBlockStatement()
+		expression.Alternative = &ast.IfExspression{
+			Token:       p.curToken,
+			Condition:   &ast.Bool{Token: p.curToken, Value: true},
+			Consequence: p.parseBlockStatement(),
+		}
+	}
+
+	if p.curTokenIs(token.ELIF) {
+		expression.Alternative = p.parseIfExpression()
 	}
 
 	return expression
