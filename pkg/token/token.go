@@ -58,35 +58,45 @@ const (
 	CONST  Type = "::"
 
 	// Delimiters
-	NL     Type = "NL"
-	LPAREN Type = "("
-	RPAREN Type = ")"
-	COMMA  Type = ","
+	NL       Type = "NL"
+	LPAREN   Type = "("
+	RPAREN   Type = ")"
+	COMMA    Type = ","
+	LBRACKET Type = "["
+	RBRACKET Type = "]"
 
 	// Keywords
-	START  Type = "START"
-	END    Type = "END"
-	TRUE   Type = "TRUE"
-	FALSE  Type = "FALSE"
-	FN     Type = "FN"
-	RETURN Type = "RETURN"
-	AND    Type = "AND"
-	OR     Type = "OR"
-	IF     Type = "IF"
-	FOR    Type = "FOR"
+	START    Type = "START"
+	END      Type = "END"
+	TRUE     Type = "TRUE"
+	FALSE    Type = "FALSE"
+	FN       Type = "FN"
+	RETURN   Type = "RETURN"
+	AND      Type = "AND"
+	OR       Type = "OR"
+	IF       Type = "IF"
+	ELSE     Type = "ELSE"
+	ELIF     Type = "ELIF"
+	FOR      Type = "FOR"
+	BREAK    Type = "BREAK"
+	CONTINUE Type = "CONTINUE"
 )
 
 var keywords = map[string]Type{
-	"start":  START,
-	"end":    END,
-	"true":   TRUE,
-	"false":  FALSE,
-	"fn":     FN,
-	"return": RETURN,
-	"and":    AND,
-	"or":     OR,
-	"if":     IF,
-	"for":    FOR,
+	"start":    START,
+	"end":      END,
+	"true":     TRUE,
+	"false":    FALSE,
+	"fn":       FN,
+	"return":   RETURN,
+	"and":      AND,
+	"or":       OR,
+	"if":       IF,
+	"else":     ELSE,
+	"elif":     ELIF,
+	"for":      FOR,
+	"break":    BREAK,
+	"continue": CONTINUE,
 }
 
 func LookUpIdent(ident string) Type {

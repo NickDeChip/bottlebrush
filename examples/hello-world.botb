@@ -1,8 +1,0 @@
-i := 10
-for i > 0 start
-  say(i)
-  i = i - 1
-  if i == 0 start
-    say("lol")
-  end
-end

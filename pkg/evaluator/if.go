@@ -19,6 +19,10 @@ func evalIf(node *ast.IfExspression, env *object.Environment) object.Object {
 		ifEnv := object.NewEncolsedEnvironment(env)
 		return Eval(node.Consequence, ifEnv)
 	} else {
+		if node.Alternative != nil {
+			ifEnv := object.NewEncolsedEnvironment(env)
+			return Eval(node.Alternative, ifEnv)
+		}
 		return NULL
 	}
 }

@@ -25,6 +25,12 @@ func evalFor(node *ast.ForStatement, env *object.Environment) object.Object {
 			if res.Type() == object.ERROR || res.Type() == object.RETURN {
 				return res
 			}
+			if res.Type() == object.BREAK {
+				return NULL
+			}
+			if res.Type() == object.CONTINUE {
+				continue
+			}
 		} else {
 			return NULL
 		}

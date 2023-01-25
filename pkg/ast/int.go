@@ -4,7 +4,7 @@ import "github.com/NickDeChip/bottlebrush/pkg/token"
 
 type IntegerLiteral struct {
 	Token token.Token
-	Value int32
+	Value int64
 }
 
 func (il *IntegerLiteral) expressionNode() {}

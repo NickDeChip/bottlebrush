@@ -8,9 +8,11 @@ import (
 )
 
 var (
-	NULL  = &object.Null{}
-	TRUE  = &object.Bool{Value: true}
-	FALSE = &object.Bool{Value: false}
+	NULL     = &object.Null{}
+	TRUE     = &object.Bool{Value: true}
+	FALSE    = &object.Bool{Value: false}
+	BREAK    = &object.Break{}
+	CONTINUE = &object.Continue{}
 )
 
 func Eval(node ast.Node, env *object.Environment) object.Object {
@@ -43,12 +45,20 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalCallExpression(node, env)
 	case *ast.ReturnStatement:
 		return evalReturn(node, env)
+	case *ast.BreakStatement:
+		return evalBreak(node, env)
+	case *ast.ContinueStatement:
+		return evalContinue(node, env)
 	case *ast.InfixExpression:
 		return evalInfix(node, env)
 	case *ast.PrefixExpression:
 		return evalPrefix(node, env)
 	case *ast.Bool:
 		return evalBool(node.Value)
+	case *ast.ListLiteral:
+		return evalList(node, env)
+	case *ast.IndexExspression:
+		return evalIndex(node, env)
 	}
 	return nil
 }
