@@ -3,12 +3,15 @@ package repl
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"io"
 
-	"github.com/NickDeChip/bottlebrush/pkg/evaluator"
+	"github.com/NickDeChip/bottlebrush/pkg/builtins"
+	"github.com/NickDeChip/bottlebrush/pkg/compilier"
 	"github.com/NickDeChip/bottlebrush/pkg/lexer"
 	"github.com/NickDeChip/bottlebrush/pkg/object"
 	"github.com/NickDeChip/bottlebrush/pkg/parser"
+	"github.com/NickDeChip/bottlebrush/pkg/vm"
 )
 
 const PROMT = "=>> "
@@ -17,7 +20,12 @@ func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
 	scanner.Split(scanLinesEscapable)
 
-	env := object.NewEnvironment()
+	variables := []object.Object{}
+	globals := make([]object.Object, vm.GlobalsSize)
+	symbolTable := compilier.NewSymbolTable()
+	for i, v := range builtins.Builtins {
+		symbolTable.DefineBultin(i, v.Name)
+	}
 
 	for {
 		print(PROMT)
@@ -36,11 +44,26 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		res := evaluator.Eval(prog, env)
-		if res != nil {
-			io.WriteString(out, res.Inspect())
-			io.WriteString(out, "\n")
+		comp := compilier.NewWithState(symbolTable, variables)
+		err := comp.Compile(prog)
+		if err != nil {
+			fmt.Fprintf(out, "Darn! Compilation failed!\n %s\n", err)
+			continue
 		}
+
+		code := comp.Bytecode()
+		variables = code.Variables
+
+		machine := vm.NewWithGlobleStore(code, globals)
+		err = machine.Run()
+		if err != nil {
+			fmt.Fprintf(out, "Darn! executing bytecode failed!\n %s\n", err)
+			continue
+		}
+
+		lastPopped := machine.LastPoppedStackElem()
+		io.WriteString(out, lastPopped.Inspect())
+		io.WriteString(out, "\n")
 	}
 }
 
